@@ -1,0 +1,21 @@
+
+/* Windows typography and portable-edition details. */
+:root {
+  --ui: "Segoe UI Variable Text", "Segoe UI", Arial, sans-serif;
+  --display: Georgia, "Palatino Linotype", ui-serif, serif;
+}
+.brand-name { display: flex; align-items: center; gap: 8px; }
+.windows-edition {
+  padding: 3px 5px; border: 1px solid var(--line); border-radius: 4px;
+  font: 600 8px/1 var(--ui); letter-spacing: .09em; color: var(--muted);
+}
+.local-scan-title { margin: 18px 0 0; font: 600 24px/1.2 var(--display); }
+.local-scan-choose { margin-top: 20px; }
+.local-privacy p { line-height: 1.6; }
+.local-privacy ul { padding-left: 22px; }
+.local-privacy li { margin: 10px 0; line-height: 1.5; }
+.recent-chip .tool-glyph.pair { width: 46px; min-width: 46px; flex: 0 0 46px; }
+.recent-chip .pair-arrow svg { width: 8px; height: 8px; }
+@media (max-width: 600px) {
+  .windows-edition { display: none; }
+}

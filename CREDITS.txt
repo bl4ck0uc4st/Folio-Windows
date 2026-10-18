@@ -1,0 +1,34 @@
+﻿Folio Windows is a local Windows adaptation of Folio by bl4ck0uc4st:
+https://github.com/bl4ck0uc4st/folio
+Inspected upstream commit: 1c4edf9a3542ccf86e14593af7c030b00f7f93ef
+
+Windows adaptation:
+- Windows text, fonts, signature-font choices, and keyboard hints.
+- Ctrl+Y redo in the editor.
+- Replaced phone pairing/server/polling with local scan/photo imports.
+- Removed the embedded phone helper and QR generator.
+- Removed the localhost exception from Content Security Policy.
+- Local privacy dialog with a control to forget remembered signatures.
+- Portable Edge/Chrome launcher; no installation or network permissions.
+- Corrected download feedback to respect the browser's actual save behavior.
+- Fixed missing CSV indentation defaults that produced invalid text coordinates.
+
+The original application code and bundled notices are retained. This package
+does not grant a new license to upstream code. The upstream repository does
+not include a top-level LICENSE file at the commit above.
+
+Bundled project credits from the upstream README:
+pdf-lib — MIT — https://github.com/Hopding/pdf-lib
+PDF.js — Apache-2.0 — https://github.com/mozilla/pdf.js
+fflate — MIT — https://github.com/101arrowz/fflate
+SortableJS — MIT — https://github.com/SortableJS/Sortable
+Carlito / Caladea and bundled compatible font assets — SIL Open Font License.
+DrawingML shape outlines — ECMA-376 definitions distributed with Apache POI
+  (Apache-2.0): https://github.com/apache/poi
+
+The links are attribution text. Opening or using Folio does not contact them.
+
+REBUILD
+Obtain the upstream repository at the commit above. With Python 3 installed:
+  python source\build_windows.py C:\path\to\folio C:\path\to\output
+No Python or build tools are needed for normal use of Folio-Windows.html.

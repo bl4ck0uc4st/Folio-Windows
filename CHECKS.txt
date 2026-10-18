@@ -1,0 +1,27 @@
+﻿FOLIO WINDOWS — VALIDATION
+
+Validated on October 18, 2026.
+Browser: Chromium 153 on Linux, using a Windows browser user agent.
+Windows itself and the Windows launcher were not available for execution.
+
+69 browser checks passed.
+42 exported-file checks passed.
+All 18 tool screens opened successfully.
+
+Verified workflows: merge, extract/split, page organization/undo, rotate, crop,
+image to PDF, local scan cleanup, edit/undo/redo, sign/forget stored signature,
+page numbering, compression, PDF to JPG, Word/PowerPoint/Excel/CSV to PDF,
+PDF to Word/PowerPoint/Excel, and password-protected PDF import.
+
+Verified offline page reload and PDF export with the browser offline.
+Verified CSP blocks for internet, LAN, localhost, WebSocket, image, and beacon
+connections. No app HTTP/HTTPS request escaped the page's policy.
+No application JavaScript errors were observed.
+
+Exported PDFs were parsed with pypdf. Exported Office files were opened with
+python-docx, python-pptx, and openpyxl. ZIP and JPG outputs were also checked.
+Page order, text, rotations, crop sizes, signature image, numbering, and
+compression were checked using synthetic test documents.
+
+HTML SHA-256:
+986eb945d171b22394fc9f1eb6c9cb67bbf8cfb460a0745ea2d73cf8089156cc

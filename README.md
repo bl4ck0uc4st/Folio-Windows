@@ -13,6 +13,18 @@ Merge, split, edit, sign, compress, and convert documents on your own computer. 
 
 The launcher selects an installed Edge or Chrome browser. It does not install software or request administrator access. You can also use the HTML file by itself.
 
+## Personal greeting
+
+Open **Start-Folio.cmd** to detect the Windows PC name locally. The home page shows **Good morning**, **Good afternoon**, or **Good evening** using that computer's local time, and updates while the app remains open.
+
+Choose **Personalize** beside the greeting to use your own display name instead. Leave it blank to return to the detected PC name. The name is saved only in that browser on that PC. Opening the HTML directly uses the last saved name; a browser cannot read the Windows computer name on its own.
+
+## Edit existing text
+
+Choose **Edit PDF → Edit text**, then select the words to change. The editor keeps the original font when its replacement characters are available, together with the fractional font size, colour, baseline, horizontal scaling, and character spacing. Adjacent words with different fonts or styles stay separate.
+
+Clicking a line and leaving it unchanged does not replace it or add an undo step. If an embedded font subset lacks a new character, the editor uses a compatible font for that replacement.
+
 ## Tools
 
 | Group | Tools |
@@ -62,7 +74,7 @@ Save scans or document photos to your PC as JPG/PNG files. Open **Scan to PDF**,
 
 ## Validation
 
-69 browser checks and 42 exported-file checks passed. Testing covered all 18 tool screens, document workflows, Windows keyboard shortcuts, signature storage controls, offline reload/export, and blocked network connections. Exported PDFs, Office documents, ZIPs, and images were also inspected with independent readers.
+Testing covers all 18 tool screens, document workflows, Windows keyboard shortcuts, signature storage controls, offline reload/export, and blocked network connections. Additional greeting and text-editing tests check PC-name personalization, live local-time changes, original-font reuse for standard, embedded, and CID fonts, exact sizes and baselines, style boundaries, and undo/redo. Exported files are checked with independent PDF and Office readers. See [CHECKS.txt](CHECKS.txt) for the current results.
 
 Tests ran in Chromium 153 on Linux with a Windows browser user agent. Windows itself and the Windows launcher were not available for execution. See [CHECKS.txt](CHECKS.txt) for details.
 
@@ -79,3 +91,16 @@ python source\build_windows.py C:\path\to\folio C:\path\to\output
 Python and the upstream source are only needed for rebuilding. Normal use requires just the HTML file and a browser.
 
 See [CREDITS.txt](CREDITS.txt) for upstream and bundled-project attribution.
+
+### Run the greeting and text-matching tests
+
+These tools are needed only for development:
+
+```sh
+npm install
+npx playwright install chromium
+python -m pip install -r tests/requirements.txt
+python tests/make_matching_fixtures.py
+npm test
+python tests/verify_matching.py
+```

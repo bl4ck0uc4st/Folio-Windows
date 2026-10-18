@@ -3,6 +3,10 @@ https://github.com/bl4ck0uc4st/folio
 Inspected upstream commit: 1c4edf9a3542ccf86e14593af7c030b00f7f93ef
 
 Windows adaptation:
+- Local Windows PC-name greeting with a saved display-name override.
+- Live greeting updates based on the PC clock.
+- Existing-text font reuse, fractional sizes, colours, baseline, and spacing.
+- Separate text hit targets for mixed font styles, plus no-op edit handling.
 - Windows text, fonts, signature-font choices, and keyboard hints.
 - Ctrl+Y redo in the editor.
 - Replaced phone pairing/server/polling with local scan/photo imports.

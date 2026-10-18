@@ -1,27 +1,31 @@
-﻿FOLIO WINDOWS — VALIDATION
+﻿FOLIO WINDOWS 1.1 — VALIDATION
 
 Validated on October 18, 2026.
-Browser: Chromium 153 on Linux, using a Windows browser user agent.
-Windows itself and the Windows launcher were not available for execution.
+Browser: Chromium 153 on Linux. Windows itself and the native launcher were
+not available for execution. The Windows launcher was reviewed statically.
 
-69 browser checks passed.
-42 exported-file checks passed.
-All 18 tool screens opened successfully.
+69 general browser checks passed, covering all 18 tool screens and PDF
+workflows, Windows shortcuts, signature storage, offline reload/export, and
+CSP blocking of internet, LAN, localhost, WebSocket, image, and beacon requests.
+42 general exported-file checks passed with independent PDF/Office readers.
 
-Verified workflows: merge, extract/split, page organization/undo, rotate, crop,
-image to PDF, local scan cleanup, edit/undo/redo, sign/forget stored signature,
-page numbering, compression, PDF to JPG, Word/PowerPoint/Excel/CSV to PDF,
-PDF to Word/PowerPoint/Excel, and password-protected PDF import.
+42 greeting and existing-text browser checks passed. These cover PC-name
+parameters from the launcher, saved display-name overrides, direct HTML
+fallback, live morning/afternoon/evening changes using the local clock,
+original-font preview and export, exact point sizes, mixed-style boundaries,
+character spacing, horizontal scaling, no-op edits, and undo/redo.
 
-Verified offline page reload and PDF export with the browser offline.
-Verified CSP blocks for internet, LAN, localhost, WebSocket, image, and beacon
-connections. No app HTTP/HTTPS request escaped the page's policy.
-No application JavaScript errors were observed.
+21 existing-text export checks passed for standard, embedded TrueType,
+and Identity-H CID fonts. The original PDF font, point size, and baseline
+were retained. Text colours matched within one display level per channel.
+Neighbouring text remained unchanged and replacement text stayed selectable.
 
-Exported PDFs were parsed with pypdf. Exported Office files were opened with
-python-docx, python-pptx, and openpyxl. ZIP and JPG outputs were also checked.
-Page order, text, rotations, crop sizes, signature image, numbering, and
-compression were checked using synthetic test documents.
+Total: 174 checks passed. No application JavaScript errors or unexpected
+HTTP/HTTPS requests were observed.
+
+Font subsets may lack new characters; those replacements use a compatible
+font. Direct HTML opening cannot inspect Windows environment variables;
+Start-Folio.cmd supplies the PC name locally, with a saved-name fallback.
 
 HTML SHA-256:
-986eb945d171b22394fc9f1eb6c9cb67bbf8cfb460a0745ea2d73cf8089156cc
+5a85a55fcb703a29dd9b199ad722e3ba6bf564c082f58a9eb785115a8a03dbc6

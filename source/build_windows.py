@@ -30,6 +30,70 @@ def windows_text(text):
     return text
 
 
+def source_text(name):
+    return (Path(__file__).parent / name).read_text(encoding="utf-8")
+
+
+def patch_editor(text):
+    text = replace_once(text,
+        "const ED_FONTS = [['helvetica', 'Sans'], ['times', 'Serif'], ['courier', 'Mono']];",
+        "const ED_FONTS = [['helvetica', 'Sans'], ['times', 'Serif'], ['courier', 'Mono'], ['carlito', 'Calibri'], ['caladea', 'Cambria']];")
+    text = text.replace("function baselineRatio(family, bold, italic) {", "function baselineRatio(family, bold, italic, cssOverride) {")
+    text = replace_once(text, "const key = family + (bold ? 'b' : '') + (italic ? 'i' : '');", "const key = family + (bold ? 'b' : '') + (italic ? 'i' : '') + (cssOverride || '');")
+    text = replace_once(text, "${CSS_FAMILY[family]}", "${cssOverride || CSS_FAMILY[family] || CSS_FAMILY.helvetica}")
+    text = replace_once(text,
+        "if (cur && gap < 0.9 * Math.max(cur.size, it.size) && Math.abs(it.size - cur.size) < 0.25 * cur.size && gap > -0.5 * it.size) {",
+        "if (cur && gap < 0.9 * Math.max(cur.size, it.size) && Math.abs(it.size - cur.size) < 0.02 && gap > -0.5 * it.size && cur.font.bold === it.font.bold && cur.font.italic === it.font.italic && editorFontName(cur.font.sourceName || cur.font.name) === editorFontName(it.font.sourceName || it.font.name) && Math.abs((cur.horizontalScale || 1) - (it.horizontalScale || 1)) < 0.002 && JSON.stringify(cur.color || null) === JSON.stringify(it.color || null)) {")
+    text = replace_once(text,
+        "font: { ...it.font } };",
+        "font: { ...it.font }, color: it.color, horizontalScale: it.horizontalScale || 1 };")
+    text = replace_once(text,
+        "return segs.map((s) => ({ ...s, text: s.text.replace(/\\s+/g, ' ').trim() })).filter((s) => s.text);",
+        "return segs.filter((s) => s.text.trim());")
+    text = replace_once(text,
+        "pageText(this.src, i).then((t) => textSegments(t.items)).catch(() => [])",
+        "analyzePage(this.src, i, { background: true, dpi: 96 }).then((t) => { const segments = textSegments(t.items.filter(it => it.visible !== false)); if (t.bg) freeCanvas(t.bg.canvas); return segments; }).catch(() => [])")
+    text = replace_once(text,
+        "Object.assign(el.style, { left: px(o.x), top: px(o.y), font: edFont(o, k), color: o.color });",
+        "Object.assign(el.style, { left: px(o.x), top: px(o.y), color: o.color }, editorTextAppearance(o, o.text, k));")
+    text = replace_once(text,
+        "textWidth(winNormalize(l || ' '), f)", "editorTextWidth(o, l || ' ')")
+    text = replace_once(text,
+        "    const font = seg.font.mono ? 'courier' : seg.font.serif ? 'times' : 'helvetica';\n    const size = Math.round(seg.size * 2) / 2;",
+        "    const matched = await editorMatchedStyle(this.src, i, seg);\n    const { font } = matched;\n    const size = seg.size;")
+    text = replace_once(text,
+        "id: uid('o'), page: i, type: 'text', text: seg.text, size, font, bold: !!seg.font.bold, italic: !!seg.font.italic,\n      color: '#' + rgbToHex(ink), x: seg.x, y: seg.y - baselineRatio(font, seg.font.bold, seg.font.italic) * size, cover: cover.id,",
+        "id: uid('o'), page: i, type: 'text', text: seg.text, originalText: seg.text, size, ...matched, bold: !!seg.font.bold, italic: !!seg.font.italic,\n      color: '#' + rgbToHex(seg.color || ink), x: seg.x, y: 0, cover: cover.id,")
+    text = replace_once(text,
+        "    this.st.objs.push(cover, text);\n    this.commit(before);",
+        "    text.y = seg.y - editorBaseline(text) * size;\n    text.originalStyle = { font: text.font, bold: text.bold, italic: text.italic, size: text.size, color: text.color };\n    this.st.objs.push(cover, text);\n    this._pendingBefore = before;")
+    text = replace_once(text,
+        "Object.assign(ta.style, { left: `${o.x * k}px`, top: `${o.y * k}px`, font: edFont(o, k), color: o.color });",
+        "Object.assign(ta.style, { left: `${o.x * k}px`, top: `${o.y * k}px`, color: o.color }, editorTextAppearance(o, ta.value, k));")
+    text = replace_once(text,
+        "const w = Math.max(...lines.map((l) => textWidth(winNormalize(l || ' '), { family: o.font, bold: o.bold, italic: o.italic, size: o.size })), o.size * 2);\n      ta.style.width = `${(w + o.size * 1.2) * k}px`;",
+        "const appearance = editorTextAppearance(o, ta.value, k);\n      Object.assign(ta.style, appearance);\n      const horizontal = parseFloat(appearance.transform.slice(7)) || 1;\n      const w = Math.max(...lines.map((l) => editorTextWidth(o, l || ' ')), o.size * 2);\n      ta.style.width = `${(w / horizontal + o.size * 1.2) * k}px`;")
+    text = replace_once(text,
+        "      if (!o.text.trim()) {\n        this.st.objs = this.st.objs.filter((x) => x.id !== o.id && x.id !== o.cover);",
+        "      const unchanged = o.cover && o.text === o.originalText && Object.entries(o.originalStyle || {}).every(([key, value]) => o[key] === value);\n      if (unchanged || !o.text.trim()) {\n        this.st.objs = this.st.objs.filter((x) => x.id !== o.id && !(unchanged && x.id === o.cover));")
+    text = replace_once(text,
+        "Object.assign(this.editing.el.style, { font: edFont(o, this.scale), color: o.color });",
+        "Object.assign(this.editing.el.style, { color: o.color }, editorTextAppearance(o, this.editing.el.value, this.scale));")
+    text = replace_once(text,
+        "    const o = this.selObj;\n    if ((k === 'Delete'",
+        "    if (mod && k.toLowerCase() === 'y') { e.preventDefault(); this.redo(); return true; }\n    const o = this.selObj;\n    if ((k === 'Delete'")
+    text = replace_once(text,
+        "      const size = numberInput(cur.size,",
+        "      if (cur.sourceFontName) out.push(h('span', { class: 'ed-original-style', title: 'Keeps the original PDF font when its glyphs are available' }, cur.sourceFontName));\n      const size = numberInput(cur.size,")
+    text = replace_once(text,
+        "    const base = baselineRatio(o.font || 'helvetica', o.bold, o.italic);",
+        "    if (editorDrawOriginal(pc, o, lines)) return;\n    const base = editorBaseline(o);")
+    text = replace_once(text,
+        "size: o.size, color: hexColor(o.color) });",
+        "size: o.size, color: hexColor(o.color), scale: o.horizontalScale || 1, spacing: (o.tracking || 0) * o.size * (o.horizontalScale || 1) });")
+    return source_text("editor_text.js") + "\n" + text
+
+
 def local_scan(text):
     # Keep all of the original crop, cleanup, rotation, and PDF export code.
     # Remove the helper, QR generation, pairing, polling, and LAN code entirely.
@@ -105,6 +169,11 @@ def patch_module(name, text):
     if name == "41-scan.js":
         text = local_scan(text)
     elif name == "10-shell.js":
+        text = replace_once(text, "const USER_NAME = 'Vraj';", source_text("greeting.js"))
+        start = text.index("function greeting() {", text.index("const TOOL_WORDS"))
+        end = text.index("function filterTools(q) {", start)
+        text = text[:start] + text[end:]
+        text = replace_once(text, "h('h1', null, greeting()),", "h('div', { class: 'greeting-title' }, h('h1', { id: 'home-greeting' }, greeting()), button('Personalize', null, personalizeGreeting, 'btn quiet small', 'Choose the name in your greeting')),")
         text = replace_once(text,
             "scan: 'phone camera paper document'",
             "scan: 'local image scanner paper cleanup document'")
@@ -139,9 +208,10 @@ def patch_module(name, text):
 ];
 """ + text[end:]
     elif name == "30-editor.js":
-        text = replace_once(text,
-            "    const o = this.selObj;\n    if ((k === 'Delete'",
-            "    if (mod && k.toLowerCase() === 'y') { e.preventDefault(); this.redo(); return true; }\n    const o = this.selObj;\n    if ((k === 'Delete'")
+        text = patch_editor(text)
+    elif name == "50-pdfread.js":
+        text = replace_once(text, "      font.name = name;", "      font.name = name; font.sourceName = String(f.name || '');")
+        text = replace_once(text, "angle: Math.atan2(m[1], m[0]),", "angle: Math.atan2(m[1], m[0]), horizontalScale: Math.hypot(m[0], m[1]) / size,")
     elif name == "67-xlsx.js":
         # CSV and workbooks without explicit styles have no indent value.
         # The original multiplied undefined by 9, producing NaN PDF coordinates.

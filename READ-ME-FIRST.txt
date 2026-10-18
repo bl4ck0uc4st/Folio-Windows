@@ -5,6 +5,7 @@ GET STARTED
 2. Choose a local folder, for example C:\LocalTools\Folio.
 3. Open Start-Folio.cmd. It opens the app in Microsoft Edge or Chrome.
    You can also right-click Folio-Windows.html > Open with > Microsoft Edge.
+   The launcher detects the Windows PC name locally for the home greeting.
 4. Pick a tool, then choose files or drag files into it.
 5. Click the main action button to save your result.
 
@@ -36,6 +37,18 @@ Optimize: PDF compression.
 To PDF: images; local scan/photo cleanup; Word (.docx), PowerPoint (.pptx),
   Excel (.xlsx), and CSV/TSV.
 From PDF: JPG, Word (.docx), PowerPoint (.pptx), and Excel (.xlsx).
+
+PERSONAL GREETING
+Start-Folio.cmd passes this Windows PC name to the app locally. The greeting
+uses the PC clock and updates automatically. Choose Personalize to enter your
+own display name; leave it blank to use the detected PC name. A direct HTML
+opening uses the last saved name or a greeting without a name.
+
+EDIT EXISTING TEXT
+Choose Edit PDF, then Edit text. Original PDF fonts are reused when they have
+the characters in your replacement. Font size, colour, baseline, horizontal
+scale, and spacing are retained. Different styles stay separate. A font subset
+that lacks a new character uses a compatible replacement font.
 
 WINDOWS SHORTCUTS
 Ctrl+O         Add files to the current tool.

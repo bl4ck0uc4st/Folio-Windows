@@ -13,6 +13,24 @@ Merge, split, edit, sign, compress, and convert documents on your own computer. 
 
 The launcher selects an installed Edge or Chrome browser. It does not install software or request administrator access. You can also use the HTML file by itself.
 
+## Screenshots
+
+Click an image to open it at full size. These are captures of the current app in Chromium on Linux, using sample documents. `DESKTOP-FOLIO` is an example PC name; your greeting follows your own PC name and local time.
+
+| Home - light mode | Home - dark mode |
+| --- | --- |
+| [![All 18 local PDF tools and the automatic PC-name greeting in light mode](docs/screenshots/home-light.png)](docs/screenshots/home-light.png) | [![The home screen and local PDF tools in dark mode](docs/screenshots/home-dark.png)](docs/screenshots/home-dark.png) |
+
+| Edit existing PDF text | Sign a PDF |
+| --- | --- |
+| [![The PDF editor changes the review status while retaining the original bold teal text style](docs/screenshots/edit-text.png)](docs/screenshots/edit-text.png) | [![A typed visual signature placed on a sample approval page](docs/screenshots/sign-pdf.png)](docs/screenshots/sign-pdf.png) |
+
+The editing example changes **Ready for local review** to **Ready for final review**, preserving the original font, 16.25-point size and colour.
+
+| Merge PDFs | Import scans from this PC |
+| --- | --- |
+| [![Three sample PDF documents ready to combine in the merge tool](docs/screenshots/merge-pdf.png)](docs/screenshots/merge-pdf.png) | [![Two local document images loaded in Scan to PDF with cleanup and page-size controls](docs/screenshots/scan-to-pdf.png)](docs/screenshots/scan-to-pdf.png) |
+
 ## Personal greeting
 
 Open **Start-Folio.cmd** to detect the Windows PC name locally. The home page shows **Good morning**, **Good afternoon**, or **Good evening** using that computer's local time, and updates while the app remains open.
